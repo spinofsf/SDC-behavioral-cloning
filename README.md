@@ -161,7 +161,8 @@ I then recorded the vehicle recovering from the left side and right sides of the
 Then I repeated this process on track two in order to get more data points.
 
 Data was augmented in two ways
-1) Inculding images from both the left and right cameras in the data set. Steering angle correction was left and right cameras was kept at 0.2 degrees. This is shown below
+1) Inculding images from both the left and right cameras in the data set. Steering angle correction was left and right cameras was kept at 0.2 degrees. 
+2) Flipping each image along the vertical axis
 
 ```python
     camera_adjust_angle = 0.2
@@ -174,13 +175,32 @@ Data was augmented in two ways
             steering_right = steering_center - camera_adjust_angle        
 ```
 
-To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+Flipping images is implemented using the numpy function `fliplr()`
 
-alt text alt text
+```python
+    def flip_imgs(orig_imgs, orig_meas):
+        new_imgs = [np.fliplr(image) for image in orig_imgs]
+        new_meas = [-1*meas for meas in orig_meas]
+        return new_imgs,new_meas
+```
 
-Etc ....
+All the images are then cropped on the top and bottom portions of the image so that only the road section is passed through the model
 
-After the collection process, I had X number of data points. I then preprocessed this data by ...
+```python
+    def crop_imgs(orig_imgs, crop_htop=70, crop_hbot=140): 
+        new_imgs = [image[crop_htop:crop_hbot,:,:] for image in orig_imgs]        
+        return new_imgs
+```
+
+All the images are read into memory using a generator. This means that the memory requirements are greatly simplified. In addition, flipping the images is accomplished in the generator itself rather than processing it before hand and saving them. 
+
+Generator is implemented in the function `generator_images()`
+
+After the collection process, I had X number of data points. 
+
+
+
+I then preprocessed this data by ...
 
 I finally randomly shuffled the data set and put Y% of the data into a validation set.
 
