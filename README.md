@@ -200,7 +200,7 @@ The images are read in batches using a generator. This means that the memory req
 
 Generator is implemented in the function `generator_images()`
 
-After the data is augmented, total dataset comprised of ~18K messages. The data set was split into training and validation sets at 80/20 ratio after random shuffling.
+After the data is augmented, total dataset comprised of ~18K images. The data set was split into training and validation sets at 80/20 ratio after random shuffling.
 
 ***** Dataset including left and right cameras **********
     Total images   : 18537
