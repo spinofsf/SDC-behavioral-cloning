@@ -12,7 +12,7 @@ Key steps of this pipeline are:
 ---
 ### Code
 
-Run the python notebook `behavioral_cloning.ipynb` to implement the Keras model and . Implementation consists of the following files located in the source directory
+The python notebook `behavioral_cloning.ipynb` implements the Keras model. Implementation consists of the following files located in the source directory
 
 * behavioral_cloning.ipynb          -   Implements CNN model and processing pipeline   
 * drive.py                          -   Generates the steering angle predictions in autonomous mode
