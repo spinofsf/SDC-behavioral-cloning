@@ -10,7 +10,7 @@ Key steps of this pipeline are:
 * Test the car by running it in autonomous mode 
 
 ---
-###Code
+### Code
 
 Run the python notebook `behavioral_cloning.ipynb` to implement the Keras model and . Implementation consists of the following files located in the source directory
 
@@ -24,7 +24,7 @@ Recordings of driving in autonomous mode are available in the folder `out_videos
 
 The actual model is implemented in `behavioural cloning.ipynb`. This file also contains data augmenting and processing routines.
 
-###Model Architecture and Training Strategy
+### Model Architecture and Training
 
 The model architecture is similar to the architecture proposed [here by NVIDIA](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). This architecture has been demonstrated to work in real world setting and seems to have generated reasonably good results. Hence this network was chosen as the starting point. However, since our track and lane conditions are much simpler, the depth of the network and the nodes at each layer were reduced. As described below, the final model consists of 4 convolutional layers with 3x3 convolution windows. Relu activation and 2x2 max pooling is applied after each conv. layer. Finally 3 FC layers with dropout are utilized to estimate the output of steering angle. Most of the parameters such as window sizes, learning rate were finalized based on empirical data. 
 
@@ -32,7 +32,7 @@ The augmented data set was split into training and validation sets. Training and
 
 The car runs easily at the default speed setting of 9 mph in the model. It also runs well at 15mph without crossing either of the lane boundaries. While there is a bit of moving sideways between the lanes and during the edges, this was primarily due to how the data was captured. The original data was captured at the fastest speed and did not necessarily keep the car always centered. This is another optimization that can be done easily in the near future.
 
-###Final Model Architecture
+### Final Model 
 
 The final model architecture is located in the file `behavioural cloning.ipynb` and is shown below. It consists of 4 convolution layers followed by 3 FC layers. Each convolution layers is followed by a Relu activation layers and a max pooling layer. A lamda layer that takes the cropped images and 
 
@@ -133,7 +133,7 @@ ________________________________________________________________________________
 
 ```
 
-3. Creation of the Training Set & Training Process
+### Training Set & Data Augmentation
 
 Data was captured from the simulator in training mode and augmented. Total data set includes
 1) three laps of center driving on the original track  2) two laps of driving in reverse and 3) one lap of recovery. Data collection is oen of the most important parts of this project. One of the experiments that was to capture the data while driving the car at the maximum speed which meant that the corners were not taken at the middle of the road, but closer to the edge like in the real world. This results in the car behaving very similarly in autonomous mode as well. The car comes close to the edges while taking a turn but stays within lanes. 
@@ -190,11 +190,11 @@ After the data is augmented, total dataset comprised of ~18K images. The data se
 
 The network was run for 10 epochs anf Adam optimizer was used with a modified learning rate of 0.0001. This is observed  to result in slightly better validation performance than the default learning rate.
 
-###Video Output
+### Video Output
 
 Here are links to the [video output](./output_videos/adv_lane_track.mp4). Another version with slower speed is shown [here](./output_videos/adv_lane_track1.mp4). 
 
 ---
 
-###Discussion and further work
+### Discussion and further work
 This project is a good introduction to Keras and CNN's. Many improvements can be seen, but most of them primarily result from collecting better training data and augmenting. The CNN model seems quite robust and capable of learning complex non-linear functions as demonstrated in the NVIDIA study mentioned above. The goal going forward is to implement a more complex network and run it on data collected in the real world.
