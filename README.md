@@ -195,7 +195,7 @@ The network was run for 10 epochs anf Adam optimizer was used with a modified le
 
 ### Video Output
 
-Here are links to the [video output](https://youtu.be/6w7EaAMmfV0). 
+Here is the link to the [video output](https://youtu.be/6w7EaAMmfV0). 
 
 ---
 
