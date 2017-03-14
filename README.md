@@ -204,9 +204,8 @@ The network was run for 10 epochs anf Adam optimizer was used with a modified le
 
 ###Video Output
 
-Here are links to the [video output](./output_videos/adv_lane_track.mp4).
+Here are links to the [video output](./output_videos/adv_lane_track.mp4). Another version with slower speed is shown [here](./output_videos/adv_lane_track1.mp4). 
 
-Another version with slower speed is shown [here](./output_videos/adv_lane_track1.mp4). 
 ---
 
 ###Discussion and further work
