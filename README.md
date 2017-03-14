@@ -192,7 +192,7 @@ All the images are then cropped on the top and bottom portions of the image so t
         return new_imgs
 ```
 
-![alt text](./writeup_images/img_ipeline.png)
+![alt text](./writeup_images/image_ipeline.png)
 
 
 All the images are read into memory using a generator. This means that the memory requirements are greatly simplified. In addition, flipping the images is accomplished in the generator itself rather than processing it before hand and saving them. 
