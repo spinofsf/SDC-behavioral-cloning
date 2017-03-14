@@ -192,11 +192,20 @@ Generator is implemented in the function `generator_images()`
 
 After the data is augmented, total dataset comprised of ~18K images. The data set was split into training and validation sets at 80/20 ratio after random shuffling.
 
-***** Dataset including left and right cameras **********
-    Total images   : 18537
-    Training Set   : 14829 
-    Validation Set : 3708                     
-*********************************************************
+| Source        | Destination   | 
+|:-------------:|:-------------:| 
+| 580, 460      | 100, 0        | 
+| 735, 460      | 1180, 0       |
+| 0, 720        | 100, 720      |
+| 1280, 720     | 1180, 0       |
+
+
+|  Dataset including left and right cameras |
+|:-----------------------------------------:|
+|   Total images   : 18537                  |
+|    Training Set   : 14829                 |
+|    Validation Set : 3708                  |                     
+
 
 The network was run for 10 epochs anf Adam optimizer was used with a modified learning rate of 0.0001. This is observed  to result in slightly better validation performance than the default learning rate.
 
