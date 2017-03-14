@@ -192,24 +192,22 @@ All the images are then cropped on the top and bottom portions of the image so t
         return new_imgs
 ```
 
+![alt text](./writeup_images/img_ipeline.png)
+
+
 All the images are read into memory using a generator. This means that the memory requirements are greatly simplified. In addition, flipping the images is accomplished in the generator itself rather than processing it before hand and saving them. 
 
 Generator is implemented in the function `generator_images()`
 
-After the collection process, I had X number of data points. 
+After the data is augmented, total dataset comprised of ~18K messages. The data set was split into training and validation sets at 80/20 ratio after random shuffling.
 
+***** Dataset including left and right cameras **********
+    Total images   : 18537
+    Training Set   : 14829 
+    Validation Set : 3708                     
+*********************************************************
 
-
-I then preprocessed this data by ...
-
-I finally randomly shuffled the data set and put Y% of the data into a validation set.
-
-I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
-
-
-
-
-
+The network was run for 10 epochs anf Adam optimizer was used with a modified learning rate of 0.0001. This is observed  to result in slightly better validation performance than the default learning rate.
 
 
 
