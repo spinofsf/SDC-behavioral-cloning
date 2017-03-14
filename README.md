@@ -200,4 +200,4 @@ Here are links to the [video output](./output_videos/adv_lane_track.mp4). Anothe
 ---
 
 ### Discussion and further work
-This project is a good introduction to Keras and CNN's. Many improvements can be seen, but most of them primarily result from collecting better training data and augmenting. The CNN model seems quite robust and capable of learning complex non-linear functions as demonstrated in the NVIDIA study mentioned above. The goal going forward is to implement a more complex network and run it on data collected in the real world.
+This project is a good introduction to Keras and CNN's. Many improvements can be seen, mostly as a result of collecting better training data and augmenting. The CNN model seems quite robust and capable of learning complex non-linear functions as already demonstrated in the NVIDIA study mentioned above. Further work can be done in implementing a more complex network and run it on data collected in the real world.
