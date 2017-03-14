@@ -36,21 +36,173 @@ The actual model is implemented in `behavioural cloning.ipynb`. This file also c
 
 ###Model Architecture and Training Strategy
 
-The model architecture is similar to the architecture proposed [here by NVIDIA](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf)
+The model architecture is similar to the architecture proposed [here by NVIDIA](http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf). This architecture has been demonstrated to work in real world setting and seems to have generated reasonably good results. Hence this network was chosen as the starting point. However, since our track and lane conditions are much simpler, the depth of the network and the nodes at each layer were reduced. As described below, the final model consists of 4 convolutional layers with 3x3 convolution windows. Relu activation and 2x2 max pooling is applied after each conv. layer. Finally 3 FC layers with dropout are utilized to estimate the output of steering angle. Most of the parameters such as window sizes, learning rate were finalized based on empirical data. 
 
-Camera matrix and distortion coefficients are calculated using a set of chessboard images and Opencv functions.
+The augmented data set was split into training and validation sets. Training and validation losses were monitored to ensure that the model is not overfitting the data. To better generalize, the driving data that was collected was augmented to reduce the driving biases associated with the data set. Also, dropout was used in the dense layers toward the output. It was also observed that 10 epochs of training are sufficient to run the car reasonably well in autonomous mode. There is room for a lot more optimization both in terms of augmenting the data and the model which will be done in the future.
 
-First step is to map 3D real world object points to 2D image space for the chessboard images. The chessboard images are fixed on a constant XY plane during capture, so object points are 3D points with Z axis of 0. 
+The car runs easily at the default speed setting of 9 mph in the model. It also runs well at 15mph without crossing either of the lane boundaries. While there is a bit of moving sideways between the lanes and during the edges, this was primarily due to how the data was captured. The original data was captured at the fastest speed and did not necessarily keep the car always centered. This is another optimization that can be done easily in the near future.
+
+###Final Model Architecture
+
+The final model architecture is located in the file `behavioural cloning.ipynb` and is shown below. It consists of 4 convolution layers followed by 3 FC layers. Each convolution layers is followed by a Relu activation layers and a max pooling layer. A lamda layer that takes the cropped images and 
 
 ```python
-    objp = np.zeros((6*9,3), np.float32)
-    objp[:,:2] = np.mgrid[0:9,0:6].T.reshape(-1,2)
+    #Keras model
+    from keras.models import Sequential
+    from keras.layers import Dense, Dropout, Activation, Convolution2D, core, convolutional, MaxPooling2D, Lambda, Flatten
+
+    model = Sequential()
+
+    #Original image (160, 320, 3).. With cropping (70,320)
+    model.add(Lambda(lambda x : (x-127.5)/127.5, input_shape = (70,320,3)))
+
+    #adds 16 3x3 filters on input and a 2x2 max pooling
+    #output after conv. is 16@68x318, after pooling 16@34x159
+    model.add(Convolution2D(16,3,3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2)))
+
+    #output after conv. is 24@32x157, after pooling 24@16x78        
+    model.add(Convolution2D(24,3,3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2)))
+          
+    #output after conv. is 32@14x76, after pooling 32@7x38          
+    model.add(Convolution2D(32,3,3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2)))
+
+    #output after conv. is 64@5x36, after pooling 64@2x18          
+    model.add(Convolution2D(64,3,3))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2,2)))
+          
+    #output is 64X2X18 = 2304          
+    model.add(Flatten())
+    model.add(Dense(300, activation = 'relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(100, activation = 'relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(10, activation = 'relu'))
+    model.add(Dense(1))
+
+```
+Here is a visulation of network and output from the model that shows the parameters in each layer. In total there are ~750K parameters that are trained. 
+
+```python
+____________________________________________________________________________________________________
+Layer (type)                     Output Shape          Param #     Connected to                     
+====================================================================================================
+lambda_1 (Lambda)                (None, 70, 320, 3)    0           lambda_input_1[0][0]             
+____________________________________________________________________________________________________
+convolution2d_1 (Convolution2D)  (None, 68, 318, 16)   448         lambda_1[0][0]                   
+____________________________________________________________________________________________________
+activation_1 (Activation)        (None, 68, 318, 16)   0           convolution2d_1[0][0]            
+____________________________________________________________________________________________________
+maxpooling2d_1 (MaxPooling2D)    (None, 34, 159, 16)   0           activation_1[0][0]               
+____________________________________________________________________________________________________
+convolution2d_2 (Convolution2D)  (None, 32, 157, 24)   3480        maxpooling2d_1[0][0]             
+____________________________________________________________________________________________________
+activation_2 (Activation)        (None, 32, 157, 24)   0           convolution2d_2[0][0]            
+____________________________________________________________________________________________________
+maxpooling2d_2 (MaxPooling2D)    (None, 16, 78, 24)    0           activation_2[0][0]               
+____________________________________________________________________________________________________
+convolution2d_3 (Convolution2D)  (None, 14, 76, 32)    6944        maxpooling2d_2[0][0]             
+____________________________________________________________________________________________________
+activation_3 (Activation)        (None, 14, 76, 32)    0           convolution2d_3[0][0]            
+____________________________________________________________________________________________________
+maxpooling2d_3 (MaxPooling2D)    (None, 7, 38, 32)     0           activation_3[0][0]               
+____________________________________________________________________________________________________
+convolution2d_4 (Convolution2D)  (None, 5, 36, 64)     18496       maxpooling2d_3[0][0]             
+____________________________________________________________________________________________________
+activation_4 (Activation)        (None, 5, 36, 64)     0           convolution2d_4[0][0]            
+____________________________________________________________________________________________________
+maxpooling2d_4 (MaxPooling2D)    (None, 2, 18, 64)     0           activation_4[0][0]               
+____________________________________________________________________________________________________
+flatten_1 (Flatten)              (None, 2304)          0           maxpooling2d_4[0][0]             
+____________________________________________________________________________________________________
+dense_1 (Dense)                  (None, 300)           691500      flatten_1[0][0]                  
+____________________________________________________________________________________________________
+dropout_1 (Dropout)              (None, 300)           0           dense_1[0][0]                    
+____________________________________________________________________________________________________
+dense_2 (Dense)                  (None, 100)           30100       dropout_1[0][0]                  
+____________________________________________________________________________________________________
+dropout_2 (Dropout)              (None, 100)           0           dense_2[0][0]                    
+____________________________________________________________________________________________________
+dense_3 (Dense)                  (None, 10)            1010        dropout_2[0][0]                  
+____________________________________________________________________________________________________
+dense_4 (Dense)                  (None, 1)             11          dense_3[0][0]                    
+====================================================================================================
+Total params: 751,989
+Trainable params: 751,989
+Non-trainable params: 0
+____________________________________________________________________________________________________
+
 ```
 
-Then, we find internal corners of the chessboard using the Opencv function `cv2.findChessboardCorners()` and add the (x,y) coordinates to image space as shown below  
+Here is a visualization of the architecture (note: visualizing the architecture is optional according to the project rubric)
+
+![alt text](./writeup_images/pipeline.png)
+
+
+3. Creation of the Training Set & Training Process
+
+Data was captured from the simulator in training mode and augmented. Total data set includes
+1) three laps of center driving on the original track  2) two laps of driving in reverse and 3) one lap of recovery. Data collection is oen of the most important parts of this project. One of the experiments that was to capture the data while driving the car at the maximum speed which meant that the corners were not taken at the middle of the road, but closer to the edge like in the real world. This results in the car behaving very similarly in autonomous mode as well. The car comes close to the edges while taking a turn but stays within lanes. 
+
+Here is an example image of center lane driving:
+
+alt text
+
+While there are a lot of driving straight, 
+
+I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
+
+Then I repeated this process on track two in order to get more data points.
+
+Data was augmented in two ways
+1) Inculding images from both the left and right cameras in the data set. Steering angle correction was left and right cameras was kept at 0.2 degrees. This is shown below
+
 ```python
-    ret, corners = cv2.findChessboardCorners(gray, (9,6),None)
+    camera_adjust_angle = 0.2
+
+    with open(csv_file, 'r') as f:
+        reader = csv.reader(f)    
+        for row in reader:
+            steering_center = float(row[3])
+            steering_left = steering_center + camera_adjust_angle
+            steering_right = steering_center - camera_adjust_angle        
 ```
+
+To augment the data sat, I also flipped images and angles thinking that this would ... For example, here is an image that has then been flipped:
+
+alt text alt text
+
+Etc ....
+
+After the collection process, I had X number of data points. I then preprocessed this data by ...
+
+I finally randomly shuffled the data set and put Y% of the data into a validation set.
+
+I used this training data for training the model. The validation set helped determine if the model was over or under fitting. The ideal number of epochs was Z as evidenced by ... I used an adam optimizer so that manually training the learning rate wasn't necessary.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Finally calibration matrix (mtx) and distortion coefficients (dst) are calculated using the `cv2.calibrateCamera()` function
 ```python
