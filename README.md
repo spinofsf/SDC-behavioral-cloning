@@ -150,15 +150,7 @@ Here is a visualization of the architecture (note: visualizing the architecture 
 Data was captured from the simulator in training mode and augmented. Total data set includes
 1) three laps of center driving on the original track  2) two laps of driving in reverse and 3) one lap of recovery. Data collection is oen of the most important parts of this project. One of the experiments that was to capture the data while driving the car at the maximum speed which meant that the corners were not taken at the middle of the road, but closer to the edge like in the real world. This results in the car behaving very similarly in autonomous mode as well. The car comes close to the edges while taking a turn but stays within lanes. 
 
-Here is an example image of center lane driving:
-
-alt text
-
-While there are a lot of driving straight, 
-
-I then recorded the vehicle recovering from the left side and right sides of the road back to center so that the vehicle would learn to .... These images show what a recovery looks like starting from ... :
-
-Then I repeated this process on track two in order to get more data points.
+While there is a lot of driving straight that results neutral steering angle, this data was still kept in the dataset without reducing it. Since this seems to be a valid real world scenario (lot of straight driving as opposed to curves), effort was made to keep the training data as-is and generalize the model using other techniques instead (reverse driving, lr flip, dropout).
 
 Data was augmented in two ways
 1) Inculding images from both the left and right cameras in the data set. Steering angle correction was left and right cameras was kept at 0.2 degrees. 
