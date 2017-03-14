@@ -1,5 +1,5 @@
 # SDC-behavioral-cloning
-The goal of this project is to train a convolutional nueral net to generate the correct steering angles form training data. Note that eventhough the car drives autonomously on test track, the only prediction the nueralnet is making is the 'steering angle'. It will be interesting to further develop this idea to include to generate other required parameters like throttle which may require  a combination of sensor data and machine learning.  
+The goal of this project is to train a convolutional nueral net to generate the correct steering angles from training data. Note that eventhough the car drives autonomously on test track, the only prediction the neuralnet is making is the 'steering angle'. It will be interesting to further develop this idea to include other parameters like throttle to mimic complete driving behaviours, although this may require a combination of sensor data and machine learning.  
 
 Key steps of this pipeline are:
 * Collect drving data from the simulator in training mode
@@ -8,16 +8,6 @@ Key steps of this pipeline are:
 * Build a CNN in keras with generators to flip and crop the image on the fly 
 * Train and validate the model
 * Test the car by running it in autonomous mode 
-
-[//]: # (Image References)
-
-[image1]: ./examples/undistort_output.png "Undistorted"
-[image2]: ./test_images/test1.jpg "Road Transformed"
-[image3]: ./examples/binary_combo_example.jpg "Binary Example"
-[image4]: ./examples/warped_straight_lines.jpg "Warp Example"
-[image5]: ./examples/color_fit_lines.jpg "Fit Visual"
-[image6]: ./examples/example_output.jpg "Output"
-[video1]: ./project_video.mp4 "Video"
 
 ---
 ###Code
