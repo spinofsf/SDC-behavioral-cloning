@@ -22,7 +22,7 @@ The python notebook `behavioral_cloning.ipynb` implements the Keras model. Imple
 
 Recordings of driving in autonomous mode are available in the folder `out_videos`. The simulator i downloaded had a speed set to 9mph. Uploaded are videos in autonomous mode at speeds 9mph and 15 mph.
 
-The actual model is implemented in `behavioural cloning.ipynb`. This file also contains data augmenting and processing routines.
+The actual model is implemented in `behavioural cloning.ipynb`. It also contains data augmenting and processing routines.
 
 ### Model Architecture and Training
 
