@@ -34,7 +34,7 @@ The car runs easily at the default speed setting of 9 mph set in `drive.py`. It 
 
 ### Final Model 
 
-The final model architecture is located in the file `behavioural cloning.ipynb` and is shown below. It consists of 4 convolution layers followed by 3 FC layers. Each convolution layers is followed by a Relu activation layers and a max pooling layer. A lamda layer that takes the cropped images and 
+The final model architecture is located in the file `behavioural cloning.ipynb` and is shown below. It consists of 4 convolution layers followed by 3 FC layers. Each convolution layers is followed by a Relu activation layers and a max pooling layer. The convolution windows are 3x3 and pooling windows are chosen to be 2x2. A lamda layer takes the cropped input images and normalizes them before passing them through the conv. layers.
 
 ```python
     #Keras model
