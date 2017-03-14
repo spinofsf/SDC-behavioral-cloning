@@ -77,9 +77,11 @@ The final model architecture is located in the file `behavioural cloning.ipynb` 
     model.add(Dense(1))
 
 ```
-Here is a visualization of network and output from the model that shows the parameters in each layer. In total there are ~750K parameters that are trained. 
+Here is a visualization of network and output from the model that shows the parameters in each layer. As shown below, there are ~750K parameters that are trained in the network.
+
 
 ![alt text](./writeup_images/conv_net.png)
+
 
 
 ```python
