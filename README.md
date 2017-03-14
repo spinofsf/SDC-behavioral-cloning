@@ -136,13 +136,17 @@ ________________________________________________________________________________
 ### Training Set & Data Augmentation
 
 Data was captured from the simulator in training mode and augmented. Total data set includes
-1) three laps of center driving on the original track  2) two laps of driving in reverse and 3) one lap of recovery. Data collection is oen of the most important parts of this project. One of the experiments that was to capture the data while driving the car at the maximum speed which meant that the corners were not taken at the middle of the road, but closer to the edge like in the real world. This results in the car behaving very similarly in autonomous mode as well. The car comes close to the edges while taking a turn but stays within lanes. 
+1. three laps of center driving on the original track  
+2. two laps of driving in reverse and 
+3. one lap of recovery. 
 
-While there is a lot of driving straight that results neutral steering angle, this data was still kept in the dataset without reducing it. Since this seems to be a valid real world scenario (lot of straight driving as opposed to curves), effort was made to keep the training data as-is and generalize the model using other techniques instead (reverse driving, lr flip, dropout).
+Data collection is oen of the most important parts of this project. One of the experiments that was done was to capture the data while driving the car at the maximum speed which meant that the corners were not taken at the middle of the road, but closer to the edges like in the real world. This results in the car behaving very similarly in autonomous mode as well. The car comes close to the edges while taking a turn but stays within lanes. 
+
+While there is a lot of straight line driving in the training mode that results in neutral steering angle, this data was still kept in the dataset without reducing it. Since this seems to be a valid real world scenario (lot of straight driving as opposed to curves), effort was made to keep the training data as-is and generalize the model using other techniques instead (reverse driving, lr flip, dropout).
 
 Data was augmented in two ways
-1) Inculding images from both the left and right cameras in the data set. Steering angle correction was left and right cameras was kept at 0.2 degrees. 
-2) Flipping each image along the vertical axis
+1. Including images from both the left and right cameras in the data set. Steering angle correction was left and right cameras was kept at +/-0.2 degrees. 
+2. Flipping each image along the vertical axis
 
 ```python
     camera_adjust_angle = 0.2
@@ -171,12 +175,11 @@ All the images are then cropped on the top and bottom portions of the image so t
         new_imgs = [image[crop_htop:crop_hbot,:,:] for image in orig_imgs]        
         return new_imgs
 ```
-
-Shown below are the original images from the left, center and right cameras captured in simulation mode. Note that the steering angles are empirically set to an offset of 0.2deg in either direction. THe next row shows augmented data by flipping each of the image across the horizontal axis. THe bottom two rows show the cropped versions of the rows above so that only the road area that is of interest is preserved.
+Every image captured from the center of the camera is thus processed to generate 6 total images. Shown below are the original images from the left, center and right cameras captured in simulation mode. Note that the steering angles are empirically set to an offset of 0.2deg in either direction. The next row shows the result of flipping each image across the horizontal axis. THe bottom two rows show the cropped versions so that only the road area that is of interest is preserved.
 
 ![alt text](./writeup_images/image_pipeline.png)
 
-The images are read in batches using a generator. This means that the memory requirements are greatly simplified. In addition, flipping the images is accomplished in the generator itself rather than processing it before hand and saving them. 
+The images are read in batches using a generator. Flipping the images is accomplished in the generator itself rather than processing it before hand. This eliminates loading all the images in memory at the beginning greatly reducing the memory requirements. 
 
 Generator is implemented in the function `generator_images()`
 
